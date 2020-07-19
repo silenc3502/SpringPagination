@@ -19,7 +19,10 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    components: {
+      header: LoginHeader,
+      default: Home
+    }
   },
   {
     path: '/about',
@@ -74,7 +77,6 @@ const routes = [
     path: '/LoginPage',
     name: 'LoginPage',
     components: {
-      header: LoginHeader,
       default: LoginPage
     }
   },

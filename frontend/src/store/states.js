@@ -8,6 +8,6 @@ export default {
   boards: [],
   board: null,
   // Access Token
-  accessToekn: '',
+  accessToken: '',
   myinfo: null
 }

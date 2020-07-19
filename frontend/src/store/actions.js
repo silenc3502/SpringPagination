@@ -9,8 +9,10 @@ import {
   TOGGLE_TODO_STATUS,
   FETCH_BOARD_LIST,
   FETCH_BOARD,
-  SET_ACCESS_TOKEN
-  // SET_MY_INFO
+  SET_ACCESS_TOKEN,
+  SET_MY_INFO,
+  DESTROY_ACCESS_TOKEN,
+  DESTROY_MY_INFO
 } from './mutation-types'
 
 import axios from 'axios'
@@ -86,9 +88,21 @@ export default {
 
       commit(SET_ACCESS_TOKEN, accessToken)
 
-      // return axios.get('http://localhost:7777/users/myinfo')
+      return axios.get('http://localhost:7777/users/myinfo')
     }).then(res => {
-      // commit(SET_MY_INFO, res.data)
+      console.log('After Get Auth Info')
+      commit(SET_MY_INFO, res.data)
     })
+  },
+  loginByToken ({ commit }, token) {
+    commit(SET_ACCESS_TOKEN, token)
+    return axios.get('http://localhost:7777/users/myinfo')
+      .then(res => {
+        commit(SET_MY_INFO, res.data)
+      })
+  },
+  logout ({ commit }) {
+    commit(DESTROY_MY_INFO)
+    commit(DESTROY_ACCESS_TOKEN)
   }
 }
