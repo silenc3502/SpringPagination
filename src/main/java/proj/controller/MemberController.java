@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.context.MessageSource;
 import proj.entity.Member;
+import proj.entity.MemberAuth;
 import proj.security.AuthUtil;
+import proj.service.MemberAuthService;
 import proj.service.MemberService;
 
 import javax.persistence.ManyToOne;
@@ -22,10 +24,13 @@ import java.util.Locale;
 @Log
 @RestController
 @RequestMapping("/users")
-//@CrossOrigin(origins = "http://localhost:8080", allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:8080", allowedHeaders = "*")
 public class MemberController {
     @Autowired
     private MemberService service;
+
+    @Autowired
+    private MemberAuthService authService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -110,6 +115,7 @@ public class MemberController {
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
+    /*
     //@ManyToOne
     //@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')")
     @RequestMapping(value = "/myinfo", method = RequestMethod.GET)
@@ -123,5 +129,19 @@ public class MemberController {
         //member.setUserPw("");
 
         return new ResponseEntity<>(member, HttpStatus.OK);
+    }
+     */
+
+    @RequestMapping(value = "/myinfo", method = RequestMethod.GET)
+    public ResponseEntity<MemberAuth> getMyInfo(@RequestHeader (name="Authorization") String header) throws Exception {
+        Long userNo = AuthUtil.getUserNo(header);
+        log.info("register userNo = " + userNo);
+
+        MemberAuth auth = authService.read(userNo);
+        log.info("auth: " + auth);
+
+        //member.setUserPw("");
+
+        return new ResponseEntity<>(auth, HttpStatus.OK);
     }
 }
